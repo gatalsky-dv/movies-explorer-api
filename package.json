@@ -1,0 +1,20 @@
+{
+  "name": "movies-explorer-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "cross-env PORT=3003 nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gatalsky-dv/movies-explorer-api.git"
+  },
+  "author": "gatalsky-dv",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gatalsky-dv/movies-explorer-api/issues"
+  },
+  "homepage": "https://github.com/gatalsky-dv/movies-explorer-api#readme"
+}
