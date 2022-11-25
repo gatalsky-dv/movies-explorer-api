@@ -62,7 +62,7 @@ const movieSchema = new mongoose.Schema({
   nameEN: {
     type: String,
     required: [true, 'Название фильма на английском языке'],
-  }
+  },
 });
 
 module.exports = mongoose.model('movie', movieSchema);

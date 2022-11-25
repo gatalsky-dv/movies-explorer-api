@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { isEmail } = require('validator');
-const bcrypt =require('bcryptjs');
+const bcrypt = require('bcryptjs');
 const Unauthorized = require('../errors/Unauthorized');
 
 const userSchema = new mongoose.Schema({
@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
       message: 'Неправильный формат почты',
     },
   },
-  
+
   password: {
     type: String,
     required: [true, 'Пароль пользователя'],
@@ -25,9 +25,10 @@ const userSchema = new mongoose.Schema({
     minlength: 2,
     maxlength: 30,
     required: [true, 'Имя пользователя'],
-  }
+  },
 });
 
+// eslint-disable-next-line func-names
 userSchema.statics.findUserByCredentails = function (email, password) {
   return this
     .findOne({ email })
@@ -46,6 +47,6 @@ userSchema.statics.findUserByCredentails = function (email, password) {
           return user;
         });
     });
-}
+};
 
 module.exports = mongoose.model('user', userSchema);
