@@ -3,7 +3,7 @@ const NotFound = require('../errors/NotFound');
 const BadRequest = require('../errors/BadRequest');
 const Forbidden = require('../errors/Forbidden');
 
-module.exports.getMovies = (req, res, next) => {
+module.exports.getMovies = async (req, res, next) => {
   Movie.find({})
 
     .then((movies) => res.send(movies))
@@ -13,7 +13,7 @@ module.exports.getMovies = (req, res, next) => {
     });
 };
 
-module.exports.createMovie = (req, res, next) => {
+module.exports.createMovie = async (req, res, next) => {
   const {
     country,
     director,
@@ -62,7 +62,7 @@ module.exports.createMovie = (req, res, next) => {
     });
 };
 
-module.exports.deleteMovie = (req, res, next) => {
+module.exports.deleteMovie = async (req, res, next) => {
   const { _id: userId } = req.user;
 
   Movie.findById(req.params.movieId)
