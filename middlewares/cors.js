@@ -1,8 +1,8 @@
 const allowedCors = [
-  'https://gatalsky.nomoredomains.icu',
-  'http://gatalsky.nomoredomains.icu',
-  'https://api.gatalsky.nomoredomains.icu',
-  'http://api.gatalsky.nomoredomains.icu',
+  'https://gatalsky.nomoredomains.club',
+  'http://gatalsky.nomoredomains.club',
+  'https://api.gatalsky.nomoredomains.club',
+  'http://api.gatalsky.nomoredomains.club',
   'https://localhost:3000',
   'http://localhost:3000',
 ];
