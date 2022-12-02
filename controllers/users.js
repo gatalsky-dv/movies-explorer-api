@@ -7,7 +7,7 @@ const Conflict = require('../errors/Conflict');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-module.exports.getUserMe = async (req, res, next) => {
+module.exports.getUserMe = (req, res, next) => {
   User.findById(req.user._id)
 
     .then((user) => {
@@ -25,7 +25,7 @@ module.exports.getUserMe = async (req, res, next) => {
     });
 };
 
-module.exports.updateUser = async (req, res, next) => {
+module.exports.updateUser = (req, res, next) => {
   const { name, email } = req.body;
 
   User.findByIdAndUpdate(
@@ -51,12 +51,13 @@ module.exports.updateUser = async (req, res, next) => {
     });
 };
 
-module.exports.createUser = async (req, res, next) => {
+module.exports.createUser = (req, res, next) => {
   const {
     name,
     email,
     password,
   } = req.body;
+
   bcrypt.hash(password, 10)
 
     .then((hash) => User.create({
@@ -82,18 +83,18 @@ module.exports.createUser = async (req, res, next) => {
     });
 };
 
-module.exports.login = async (req, res, next) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
-
+  
   return User.findUserByCredentials(email, password)
 
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
+        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', 
         { expiresIn: '7d' },
       );
-      res.send({ token });
+      res.status(200).send({ token });
     })
 
     .catch(next);
