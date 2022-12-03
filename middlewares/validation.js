@@ -1,10 +1,11 @@
 const { celebrate, Joi } = require('celebrate');
+const { UrlDead } = require('../utils/constants');
 
 const validationURL = (value, helpers) => {
   const regex = /^((ftp|http|https):\/\/)?(www\.)?([A-Za-zА-Яа-я0-9]{1}[A-Za-zА-Яа-я0-9-]*\.?)*\.{1}[A-Za-zА-Яа-я0-9-]{2,8}(\/([\w#!:.?+=&%@!\-/])*)?/;
 
   if (!regex.test(value)) {
-    return helpers.error('Ссылка не рабочая');
+    return helpers.error(UrlDead);
   }
   return value;
 };
@@ -26,6 +27,7 @@ const createMovieValidation = celebrate({
     image: Joi.string().required().custom(validationURL),
     trailerLink: Joi.string().required().custom(validationURL),
     thumbnail: Joi.string().required().custom(validationURL),
+    movieId: Joi.string().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
   }),
@@ -33,7 +35,7 @@ const createMovieValidation = celebrate({
 
 const movieIdValidation = celebrate({
   params: Joi.object().keys({
-    movieId: Joi.string().length(24).hex().required(),
+    movieId: Joi.string().required().length(24).hex(),
   }),
 });
 

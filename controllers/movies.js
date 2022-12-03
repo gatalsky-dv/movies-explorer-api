@@ -2,18 +2,21 @@ const Movie = require('../models/movie');
 const NotFound = require('../errors/NotFound');
 const BadRequest = require('../errors/BadRequest');
 const Forbidden = require('../errors/Forbidden');
+const {
+  BadRequestData, NotFoundMovie, DeleteMovie, ForbiddenMovie,
+} = require('../utils/constants');
 
-module.exports.getMovies = async (req, res, next) => {
-  Movie.find({})
+module.exports.getMovies = (req, res, next) => {
+  const owner = req.user._id;
 
-    .then((movies) => res.send(movies))
+  Movie.find({ owner })
 
-    .catch((err) => {
-      next(err);
-    });
+    .then((movies) => res.status(200).send(movies))
+
+    .catch(next);
 };
 
-module.exports.createMovie = async (req, res, next) => {
+module.exports.createMovie = (req, res, next) => {
   const {
     country,
     director,
@@ -23,12 +26,12 @@ module.exports.createMovie = async (req, res, next) => {
     image,
     trailerLink,
     thumbnail,
-    movieId,
     nameRU,
     nameEN,
+    movieId,
   } = req.body;
 
-  const ownerId = req.user._id;
+  const owner = req.user._id;
 
   Movie.create({
     country,
@@ -39,51 +42,60 @@ module.exports.createMovie = async (req, res, next) => {
     image,
     trailerLink,
     thumbnail,
-    movieId,
     nameRU,
     nameEN,
-    owner: ownerId,
+    movieId,
+    owner,
   })
 
-    .then((movie) => {
-      if (!movie) {
-        next(new BadRequest('Переданны некорректные данные'));
-        return;
-      }
-      res.send(movie);
-    })
+    .then(() => res.status(200).send({
+      data: {
+        country,
+        director,
+        duration,
+        year,
+        description,
+        image,
+        trailerLink,
+        thumbnail,
+        nameRU,
+        nameEN,
+        movieId,
+        owner,
+      },
+    }))
 
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequest('Переданны некорректные данные'));
+        next(new BadRequest(BadRequestData));
         return;
       }
       next(err);
     });
 };
 
-module.exports.deleteMovie = async (req, res, next) => {
-  const { _id: userId } = req.user;
+module.exports.deleteMovie = (req, res, next) => {
+  const owner = req.user._id;
 
   Movie.findById(req.params.movieId)
 
-    .orFail(() => new NotFound('Карточка не найдена'))
+    .orFail(() => new NotFound(NotFoundMovie))
 
     .then((movie) => {
-      if (movie.owner.toString() === userId) {
+      if (movie.owner.toString() === owner) {
         movie.delete()
 
-          .then(() => res.status(200).send({ message: 'Успех' }))
+          .then(() => res.status(200).send({ message: DeleteMovie }))
 
           .catch(next);
       } else {
-        throw new Forbidden('Запрещено удалять');
+        throw new Forbidden(ForbiddenMovie);
       }
     })
 
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequest('Переданны некорректные данные'));
+        next(new BadRequest(BadRequestData));
         return;
       }
       next(err);

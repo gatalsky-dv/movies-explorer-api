@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { isURL } = require('validator');
+const { UrlDead } = require('../utils/constants');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -26,7 +27,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: (v) => isURL(v, { required_protocol: true }),
-      message: 'Невалидная ссылка',
+      message: UrlDead,
     },
     required: [true, 'Ссылка на постер к фильму'],
   },
@@ -34,7 +35,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: (v) => isURL(v, { required_protocol: true }),
-      message: 'Невалидная ссылка',
+      message: UrlDead,
     },
     required: [true, 'Ссылка на трейлер фильма'],
   },
@@ -42,7 +43,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: (v) => isURL(v, { required_protocol: true }),
-      message: 'Невалидная ссылка',
+      message: UrlDead,
     },
     required: [true, 'Миниатюрное изображение постера к фильму'],
   },

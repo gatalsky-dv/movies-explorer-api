@@ -4,6 +4,7 @@ const User = require('../models/user');
 const NotFound = require('../errors/NotFound');
 const BadRequest = require('../errors/BadRequest');
 const Conflict = require('../errors/Conflict');
+const { NotFoundUser, BadRequestData, ConflictEmail } = require('../utils/constants');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -11,15 +12,15 @@ module.exports.getUserMe = (req, res, next) => {
   User.findById(req.user._id)
 
     .then((user) => {
-      if (!user._id) {
-        throw new NotFound('Пользователь не найден');
+      if (!user) {
+        throw new NotFound(NotFoundUser);
       }
-      res.send(user);
+      res.status(200).send(user);
     })
 
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequest('Переданны некорректные данные'));
+        next(new BadRequest(BadRequestData));
       }
       next(err);
     });
@@ -33,19 +34,22 @@ module.exports.updateUser = (req, res, next) => {
     { name, email },
     { new: true, runValidators: true },
   )
-    .orFail(() => { throw new BadRequest('Переданны некорректные данные'); })
+    .orFail(() => {
+      throw new NotFound(NotFoundUser);
+    })
 
     .then((user) => {
-      if (!user) {
-        throw new BadRequest('Переданны некорректные данные');
-      }
-      res.send(user);
+      res.status(200).send(user);
     })
 
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequest('Переданны некорректные данные'));
+        next(new BadRequest(BadRequestData));
         return;
+      } if (err.name === 'CastError') {
+        next(new BadRequest(BadRequestData));
+      } else if (err.code === 11000) {
+        next(new Conflict(ConflictEmail));
       }
       next(err);
     });
@@ -66,7 +70,7 @@ module.exports.createUser = (req, res, next) => {
       password: hash,
     }))
 
-    .then(() => res.send({
+    .then(() => res.status(200).send({
       data: {
         name,
         email,
@@ -75,9 +79,9 @@ module.exports.createUser = (req, res, next) => {
 
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequest('Переданны некорректные данные'));
+        next(new BadRequest(BadRequestData));
       } else if (err.code === 11000) {
-        next(new Conflict('Пользователь с таким email уже зарегистрирован'));
+        next(new Conflict(ConflictEmail));
       }
       next(err);
     });
