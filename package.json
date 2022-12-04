@@ -1,0 +1,45 @@
+{
+  "name": "movies-explorer-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "lint": "npx eslint .",
+    "lint:fix": "npx eslint . --fix",
+    "start": "node app.js",
+    "dev": "cross-env PORT=3003 nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gatalsky-dv/movies-explorer-api.git"
+  },
+  "author": "gatalsky-dv",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gatalsky-dv/movies-explorer-api/issues"
+  },
+  "homepage": "https://github.com/gatalsky-dv/movies-explorer-api#readme",
+  "devDependencies": {
+    "eslint": "^8.28.0"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.1",
+    "celebrate": "^15.0.1",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.3",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.7.0",
+    "express-winston": "^4.2.0",
+    "helmet": "^6.0.1",
+    "jest": "^29.3.1",
+    "joi": "^17.7.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.7.3",
+    "nodemon": "^2.0.20",
+    "validator": "^13.7.0",
+    "winston": "^3.8.2"
+  }
+}
