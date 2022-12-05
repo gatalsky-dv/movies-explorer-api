@@ -12,7 +12,7 @@ const validationURL = (value, helpers) => {
 
 const updateUserValidation = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
+    name: Joi.string().required().min(2).max(30),
     email: Joi.string().required().email(),
   }),
 });
@@ -27,7 +27,7 @@ const createMovieValidation = celebrate({
     image: Joi.string().required().custom(validationURL),
     trailerLink: Joi.string().required().custom(validationURL),
     thumbnail: Joi.string().required().custom(validationURL),
-    movieId: Joi.string().required(),
+    movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
   }),
@@ -35,7 +35,7 @@ const createMovieValidation = celebrate({
 
 const movieIdValidation = celebrate({
   params: Joi.object().keys({
-    movieId: Joi.string().required().length(24).hex(),
+    movieId: Joi.number().required().length(24).hex(),
   }),
 });
 
@@ -48,7 +48,7 @@ const loginValidation = celebrate({
 
 const createUserValidation = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
+    name: Joi.string().required().min(2).max(30),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   }),
