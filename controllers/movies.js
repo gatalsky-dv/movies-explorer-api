@@ -48,21 +48,8 @@ module.exports.createMovie = (req, res, next) => {
     owner,
   })
 
-    .then(() => res.status(200).send({
-      data: {
-        country,
-        director,
-        duration,
-        year,
-        description,
-        image,
-        trailerLink,
-        thumbnail,
-        nameRU,
-        nameEN,
-        movieId,
-        owner,
-      },
+    .then((card) => res.status(200).send({
+      data: card,
     }))
 
     .catch((err) => {
